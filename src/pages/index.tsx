@@ -1,4 +1,6 @@
+import Table from '@/components/Table';
 import Head from 'next/head'
+
 
 export default function Home() {
   return (
@@ -9,9 +11,12 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/user_icon.ico" />
       </Head>
-      <div>
-        <h1>Hello World!</h1>
-      </div>
+
+      <main>
+       <div className='flex flex-col h-screen justify-center items-center bg-slate-500'>
+        <Table />
+       </div>
+      </main>
     </>
   );
 }
