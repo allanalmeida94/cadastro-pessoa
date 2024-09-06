@@ -13,7 +13,7 @@ export default function Home() {
       </Head>
 
       <main>
-       <div className='flex flex-col h-screen justify-center items-center bg-slate-500'>
+       <div className='flex h-screen justify-center items-center bg-slate-500'>
         <Table />
        </div>
       </main>
