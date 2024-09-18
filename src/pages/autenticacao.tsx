@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { googleIcon } from '../../public/icons';
 import { useState } from 'react';
+import Input from '@/components/Input';
+import Button from '@/components/Button';
 
 export default function Autenticacao() {
   const[formMode, setFormMode] = useState<'login' | 'register'>('login')
@@ -19,22 +21,18 @@ export default function Autenticacao() {
         {formMode === 'login' ? 'Entre com sua conta' : 'Cadastro'}
       </h1>
       <form className='bg-white py-5 rounded-md w-full'>
-        <div className='flex flex-col py-3'>
-          <label className='mb-1 text-xl font-semibold'>Email</label>
-          <input type="email" name="email" className='p-2 rounded-md text-lg border bg-gray-200 focus:outline-none focus:bg-white focus:border focus:border-blue-500'/>
-        </div>
-        <div className='flex flex-col py-3'>
-          <label className='mb-1 text-xl font-semibold'>Senha</label>
-          <input type="password" name="senha" className='p-2 rounded-md text-lg border bg-gray-200 focus:outline-none focus:bg-white focus:border focus:border-blue-500'/>
-        </div>
+        <Input labelName='Email' typeInput='email' nameInput='email'/>
+        <Input labelName='Senha' typeInput='password' nameInput='senha'/>
         <div className='flex mt-5'>
-          <button type="submit" className='w-full px-4 py-2 text-white font-semibold text-xl bg-blue-500 hover:bg-blue-600 rounded-md'>
+          <Button handleClick={() => alert('Login realizado')} className='w-full bg-blue-500 hover:bg-blue-600 font-semibold'>
             {formMode === 'login' ? 'Entrar' : 'Cadastrar'}
-          </button>
+          </Button>
         </div>
         <hr className='my-5 border-slate-300'/>
         <div className='flex'>
-          <button className='flex justify-center items-center w-full px-4 py-2 text-white font-semibold text-xl bg-red-500 hover:bg-red-600 rounded-md'>Entrar com Google <span className='ml-2'>{googleIcon()}</span></button>
+          <Button handleClick={() => alert('Login com google realizado')} className='flex justify-center items-center w-full bg-red-500 hover:bg-red-600 font-semibold'>
+            Entrar com Google <span className='ml-2'>{googleIcon()}</span>
+          </Button>
         </div>
       </form>
       <div>
