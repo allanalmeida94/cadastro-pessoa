@@ -3,14 +3,53 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import UnauthenticatedLayout from '@/components/ui/UnauthenticatedLayout';
-import { userData } from '@/utils/schemas/createUserSchema';
+import { userData, userSchema } from '@/utils/schemas/userSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { redirect, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function Login() {
-  const {register, handleSubmit, formState: {errors}} = useForm<userData>();
+  const [error, setError] = useState('');
+  const [isFormSubmitting, setFormSubmitting] = useState(false);
+  const router = useRouter();
+  const {status} = useSession();
 
-  function logIn() {}
+  const {register, reset, handleSubmit, formState: {errors}} = useForm<userData>({resolver: zodResolver(userSchema)});
+
+  const isAuthenticated = status === "authenticated";
+
+  if (isAuthenticated) {
+    router.push('/lista-pessoa')
+  }
+
+  async function logIn(data: userData) {
+    setFormSubmitting(true)
+    try {
+      const sign = await signIn("credentials", {...data, redirect: false})
+
+      if (!sign?.error) {
+        redirect('/lista-pessoa')
+      } else {
+        renderError(sign.error.replace("Error: ", ""))
+        reset();
+      }
+      setFormSubmitting(false)
+    } catch {
+      setFormSubmitting(false)
+      renderError("Erro ao acessar o sistema, tente novamente mais tarde!")
+    }
+  }
+
+  function renderError(msg: string) {
+    setFormSubmitting(false)
+    setError(msg),
+    setTimeout(() => {
+      setError('')
+    }, 3000);
+  }
 
   function handleClickGoogle() {}
 
@@ -24,8 +63,13 @@ export default function Login() {
         <form onSubmit={handleSubmit(logIn)}>
           <Input label='Email' type='email' register={register('email')} error={errors.email?.message} />
           <Input label='Senha' type='password' register={register('password')} error={errors.password?.message}/>
+          {error &&
+            <span className="text-red-500 text-md mt-1">
+                {error}
+            </span>
+          }
           <div className='flex mt-5'>
-            <Button type='submit' text="Entrar"
+            <Button type='submit' text={isFormSubmitting ? "Entrando" : "Entrar"} disabled={isFormSubmitting}
               backgroundColor='bg-blue-500' className='w-full text-white bg-blue-500 hover:bg-blue-600'/>
           </div>
           <hr className='my-5 border-slate-400'/>
