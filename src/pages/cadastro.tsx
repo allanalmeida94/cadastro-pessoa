@@ -3,10 +3,11 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import UnauthenticatedLayout from '@/components/ui/UnauthenticatedLayout';
-import { createUserSchema, userData } from '@/utils/schemas/createUserSchema';
+import { userData, userSchema } from '@/utils/schemas/userSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -15,10 +16,16 @@ export default function Cadastro() {
   const [error, setError] = useState('');
   const [isFormSubmitting, setFormSubmitting] = useState(false);
   const router = useRouter();
+  const {status} = useSession();
 
+  const {register, handleSubmit, formState: {errors}} = useForm<userData>({resolver: zodResolver(userSchema)});
 
+  const isAuthenticated = status === "authenticated";
 
-  const {register, handleSubmit, formState: {errors}} = useForm<userData>({resolver: zodResolver(createUserSchema)});
+  if (isAuthenticated ) {
+    alert('Existe uma sessão em aberto, por gentileza sair da sessão para continuar com o cadastro!')
+    router.push('/lista-pessoa')
+  }
 
   async function createUser(data: userData) {
     setFormSubmitting(true)
