@@ -32,6 +32,8 @@ export const authOptions = {
               throw new Error("Credenciais inválidas!");
             }
 
+          } else {
+            throw new Error("Credenciais inválidas!");
           }
         } catch (error) {
           throw new Error(error as string)
