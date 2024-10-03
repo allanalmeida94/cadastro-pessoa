@@ -72,7 +72,7 @@ export default function Cadastro() {
           <h1 className='flex text-2xl font-bold justify-start items-center my-2'>
             Cadastro
           </h1>
-              <form onSubmit={handleSubmit(createUser)}>
+              <form onSubmit={handleSubmit(createUser)} noValidate>
                 <Input label='Email' type='email' register={register('email')} error={errors.email?.message} />
                 <Input label='Senha' type='password' register={register('password')} error={errors.password?.message}/>
                 {error &&
