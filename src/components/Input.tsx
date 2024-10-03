@@ -1,3 +1,5 @@
+"use client"
+
 import { HTMLInputTypeAttribute } from "react"
 import { UseFormRegisterReturn } from "react-hook-form"
 
@@ -17,6 +19,7 @@ export default function Input({label, type, error, register, ...rest}: InputProp
         {...register}
         {...rest}
         type={type}
+        autoComplete="off"
         className={`p-2 rounded-md text-lg border border-gray-300
         outline-none focus:border-blue-500`}/>
         {error &&
