@@ -1,40 +1,33 @@
 "use client";
-
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import UnauthenticatedLayout from '@/components/ui/UnauthenticatedLayout';
 import { userData, userSchema } from '@/utils/schemas/userSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function Login() {
   const [error, setError] = useState('');
   const [isFormSubmitting, setFormSubmitting] = useState(false);
+
   const router = useRouter();
-  const {status} = useSession();
 
   const {register, reset, handleSubmit, formState: {errors}} = useForm<userData>({resolver: zodResolver(userSchema)});
-
-  const isAuthenticated = status === "authenticated";
-
-  if (isAuthenticated) {
-    router.push('/lista-pessoa')
-  }
 
   async function logIn(data: userData) {
     setFormSubmitting(true)
     try {
-      const sign = await signIn("credentials", {...data, redirect: false})
+      const response = await signIn("credentials", {...data, redirect: false})
 
-      if (!sign?.error) {
-        redirect('/lista-pessoa')
-      } else {
-        renderError(sign.error.replace("Error: ", ""))
+      if (response?.error) {
+        renderError(response?.error.replace("Error: ", "") as string)
         reset();
+      } else {
+        router.push('/lista-pessoa')
       }
       setFormSubmitting(false)
     } catch {
