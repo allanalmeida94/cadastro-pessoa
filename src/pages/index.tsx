@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Cadastro pessoas</title>
+        <title>Cadastro Soft</title>
         <meta name="description" content="Crud utilizando Next.js" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/user_icon.ico" />
